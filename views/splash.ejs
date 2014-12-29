@@ -1,0 +1,31 @@
+<html lang="en">
+<head>
+	<% include partials/template/head.ejs %>
+	<% include partials/template/cssdefaults.ejs %>
+	<% include partials/template/jsdefaults.ejs %>
+</head>
+
+<body>
+	<div id="header">
+		<div id="name-container">
+			<a href="/#home" id="logo"><img src="/images/logo-white.png"></span></a>
+			
+		</div>
+		<div id="links-container">
+			<span class="header-links header-sign"><a href="/dashboard">Dashboard</a></span>
+			<span class="header-links header-sign"><a href="/logout">Sign Out</a></span>
+		</div>
+	</div>
+
+	<div class="section active" id="home-view">
+		<div class="color-white" id="body-container">
+			<div id="splash-text">
+				<h1> Real-time digitalization of notes with <span id="content-title">Noteable</span></h1>
+			</div>
+			<a id="sign-in" href="/register">Register</a>
+			<a id="sign-in" href="/login">Sign In</a>
+		</div>
+	</div>
+
+</body>
+</html>

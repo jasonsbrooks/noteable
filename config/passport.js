@@ -1,12 +1,13 @@
 // load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
 
-module.exports = function(passport, Cloudant, db) {
-    // var config = require('./config.js');
-    
-    // var Cloudant = require('cloudant')({account:config.cloudant.account, password:config.cloudant.password});
+module.exports = function(passport, config) {
+
+
+    var Cloudant = require('cloudant')({account:config.cloudant.user, password:config.cloudant.password});
+
     var bcrypt = require('bcrypt');
-    // var dbname = config.cloudant.dbname;
+    var dbname = config.cloudant.dbName;
 
     /// used to serialize the user for the session
     passport.serializeUser(function(user, done) {
@@ -27,7 +28,7 @@ module.exports = function(passport, Cloudant, db) {
             console.log(body)
 
             // Use Cloudant query to find the user just based on user name
-            // var db = Cloudant.use(dbname);
+            var db = Cloudant.use(dbname);
             db.find({selector:{username:username}}, function(err, result) {
                 if (err){
                     console.log("There was an error finding the user: " + err);

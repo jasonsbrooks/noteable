@@ -1,69 +1,30 @@
 var express = require('express');
+var app = express();
 var path = require('path');
 var favicon = require('serve-favicon');
+var bcrypt = require('bcrypt');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
-var routes = require('./routes/index');
-
-var app = express();
-
-var db;
-var Cloudant;
-var dbCredentials = {
-    dbName : 'noteable'
-};
+var session = require('express-session')
 
 
-//cloudant setup
-function initDBConnection() {
-    if (app.get('env') === 'development') {
-        dbCredentials.host = process.env.cloudantHost;
-        dbCredentials.port = process.env.cloudantPort;
-        dbCredentials.user = process.env.cloudantUsername;
-        dbCredentials.password = process.env.cloudantPassword;
-        dbCredentials.url = process.env.cloudantURL;
-    } else {
-        if(process.env.VCAP_SERVICES) {
-            var vcapServices = JSON.parse(process.env.VCAP_SERVICES);
-            if(vcapServices.cloudantNoSQLDB) {
-                dbCredentials.host = vcapServices.cloudantNoSQLDB[0].credentials.host;
-                dbCredentials.port = vcapServices.cloudantNoSQLDB[0].credentials.port;
-                dbCredentials.user = vcapServices.cloudantNoSQLDB[0].credentials.username;
-                dbCredentials.password = vcapServices.cloudantNoSQLDB[0].credentials.password;
-                dbCredentials.url = vcapServices.cloudantNoSQLDB[0].credentials.url;
-            }
-            console.log('VCAP Services: '+JSON.stringify(process.env.VCAP_SERVICES));
-        }
-    }
-    
-    
-
-    Cloudant = require('cloudant')(dbCredentials.url);
-    
-    //check if DB exists if not create
-    Cloudant.db.create(dbCredentials.dbName, function (err, res) {
-        if (err) { 
-            console.log("Database already created");
-            // console.log('could not create db ', err);
-        }
-    });
-    db = Cloudant.use(dbCredentials.dbName);
+var config;
+if (app.get('env') === 'production') {
+    config = require('./config/configProd.js');
+} else {
+    config = require('./config/configDev.js');
 }
-
-initDBConnection();
-
-
 //passport setup
 var passport = require('passport');
-require('./config/passport')(passport, Cloudant, db);
+require('./config/passport')(passport, config);
+
+//config
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
-
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -72,40 +33,73 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/bower_components', express.static(__dirname + '/bower_components'));
+app.use(session({
+  secret: 'noteable cat',
+  resave: false,
+  saveUninitialized: true
+}))
+
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(app.router);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
 
-// error handlers
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+require('./routes/routes.js')(app, passport);
+
+
+//test cloudant connection
+function initDBConnection() {
+    var Cloudant = require('cloudant')({account:config.cloudant.user, password:config.cloudant.password});
+    Cloudant.ping(function(er, reply) {
+        if (er)
+            return console.log('Failed to ping Cloudant. Did the network just go down?');
+        else {
+            console.log('Cloudant connection was successful');
+
+            //check if DB exists if not create
+            Cloudant.db.create(config.cloudant.dbName, function (err, res) {
+                if (err) { 
+                    console.log("Database already created");
+                } else {
+                    console.log("Created Noteable");
+                    var dbname = config.cloudant.dbName;
+                    var admin_user = config.admin_user;
+                    var admin_pass = config.admin_password;
+                    var index_field = config.index_field;
+                    var hash_pass = bcrypt.hashSync(admin_pass, 10);
+                    var userdb = Cloudant.use(dbname);
+                    userdb.insert({ username:admin_user, password:hash_pass }, function(err, body) {
+                        if (!err) {
+                            console.log("Admin User was created!");
+                            var username_idx = {name:'username', type:'json', index:{fields:[index_field]}};
+                            userdb.index(username_idx, function(err, body) {
+                                if (!err) {
+                                    console.log("Index " +index_field+ " was created!");
+                                } else {
+                                    console.log(err.reason);
+
+                                }
+                            });
+                        } else {
+                            console.log(err.reason);
+
+                        }
+                    });
+                }
+            });
+        }
     });
 }
 
+initDBConnection();
+
+
+// development error handler
+// will print stacktrace
+
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
-
+// to do
 
 module.exports = app;

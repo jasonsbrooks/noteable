@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+
+        <form class="form-inline" ng-submit="register()" ng-controller="RegistrationCtrl" role="form">
+            <fieldset>
+                <legend>Register User</legend>
+                <div class="form-group">
+                    <input type="text" class="form-control" ng-model="username" name="username" placeholder="Type your username..." required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" ng-model="password" name="password" placeholder="Type your password..." required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" ng-model="check_password" name="check_password" placeholder="Type your password..." required>
+                </div>
+
+                <button class="btn btn-primary">Create User</button>
+            </fieldset>
+        </form>
+
+    </div>
+</div>
+
+</br>
+
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div ng-show="failed_register" class="alert alert-danger">
+            {{failed_register}}
+        </div>
+    </div>
+</div>
