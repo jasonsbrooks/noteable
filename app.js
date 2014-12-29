@@ -5,17 +5,18 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
-
 var routes = require('./routes/index');
 
 var app = express();
 
 var db;
-var cloudant;
+var Cloudant;
 var dbCredentials = {
     dbName : 'noteable'
 };
 
+
+//cloudant setup
 function initDBConnection() {
     if (app.get('env') === 'development') {
         dbCredentials.host = process.env.cloudantHost;
@@ -39,23 +40,30 @@ function initDBConnection() {
     
     
 
-    cloudant = require('cloudant')(dbCredentials.url);
+    Cloudant = require('cloudant')(dbCredentials.url);
     
     //check if DB exists if not create
-    cloudant.db.create(dbCredentials.dbName, function (err, res) {
+    Cloudant.db.create(dbCredentials.dbName, function (err, res) {
         if (err) { 
             console.log("Database already created");
             // console.log('could not create db ', err);
         }
     });
-    db = cloudant.use(dbCredentials.dbName);
+    db = Cloudant.use(dbCredentials.dbName);
 }
 
 initDBConnection();
 
+
+//passport setup
+var passport = require('passport');
+require('./config/passport')(passport, Cloudant, db);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -64,8 +72,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', routes);
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(app.router);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
