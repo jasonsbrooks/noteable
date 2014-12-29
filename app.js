@@ -4,10 +4,54 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var fs = require('fs');
 
 var routes = require('./routes/index');
 
 var app = express();
+
+var db;
+var cloudant;
+var dbCredentials = {
+    dbName : 'noteable'
+};
+
+function initDBConnection() {
+    if (app.get('env') === 'development') {
+        dbCredentials.host = process.env.cloudantHost;
+        dbCredentials.port = process.env.cloudantPort;
+        dbCredentials.user = process.env.cloudantUsername;
+        dbCredentials.password = process.env.cloudantPassword;
+        dbCredentials.url = process.env.cloudantURL;
+    } else {
+        if(process.env.VCAP_SERVICES) {
+            var vcapServices = JSON.parse(process.env.VCAP_SERVICES);
+            if(vcapServices.cloudantNoSQLDB) {
+                dbCredentials.host = vcapServices.cloudantNoSQLDB[0].credentials.host;
+                dbCredentials.port = vcapServices.cloudantNoSQLDB[0].credentials.port;
+                dbCredentials.user = vcapServices.cloudantNoSQLDB[0].credentials.username;
+                dbCredentials.password = vcapServices.cloudantNoSQLDB[0].credentials.password;
+                dbCredentials.url = vcapServices.cloudantNoSQLDB[0].credentials.url;
+            }
+            console.log('VCAP Services: '+JSON.stringify(process.env.VCAP_SERVICES));
+        }
+    }
+    
+    
+
+    cloudant = require('cloudant')(dbCredentials.url);
+    
+    //check if DB exists if not create
+    cloudant.db.create(dbCredentials.dbName, function (err, res) {
+        if (err) { 
+            console.log("Database already created");
+            // console.log('could not create db ', err);
+        }
+    });
+    db = cloudant.use(dbCredentials.dbName);
+}
+
+initDBConnection();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

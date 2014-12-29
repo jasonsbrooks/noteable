@@ -18,3 +18,7 @@ Team
 * Sachith Gullapalli 
 * Minh Tri Pham
 * Micah Rosales 
+
+Notes
+======
+`nodemon bin/www` to run with autoreload
