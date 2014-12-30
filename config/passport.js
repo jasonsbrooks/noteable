@@ -2,8 +2,7 @@
 var LocalStrategy   = require('passport-local').Strategy;
 
 module.exports = function(passport, config) {
-
-
+    
     var Cloudant = require('cloudant')({account:config.cloudant.user, password:config.cloudant.password});
 
     var bcrypt = require('bcrypt');
