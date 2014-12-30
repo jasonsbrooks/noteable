@@ -13,9 +13,10 @@ module.exports = function(passport, config) {
         done(null, user.username);
     });
 
-    // used to deserialize the user
-    passport.deserializeUser(function(username, done) {
-        done(null, username);
+    passport.deserializeUser(function(id, done) {
+        Cloudant.use(dbname).find({selector:{username:id}}, function(err, user) {
+            done(err, user.docs[0]);
+        });
     });
 
 

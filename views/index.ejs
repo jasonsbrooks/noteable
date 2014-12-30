@@ -1,44 +1,37 @@
-<html ng-app="mainApp">
+<html lang="en">
 <head>
     <% include partials/template/head.ejs %>
     <% include partials/template/cssdefaults.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/home.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/jquery.fullPage.css" />
+    <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
     <% include partials/template/jsdefaults.ejs %>
 </head>
+
 <body>
-    <nav class="navbar navbar-default" role="navigation">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#"><img src="images/logo-white.png"/></a>
+    <div id="header">
+        <div id="name-container">
+            <a href="/#home" id="logo"><img src="/images/logo-white.png"></span></a>
+            
         </div>
+        <div id="links-container">
+            <% if (typeof user == 'undefined') { %>
+                <span class="header-links header-sign"><a href="/login">Login</a></span>
+                <span class="header-links header-sign"><a href="/register">Register</a></span>
+            <% } else { %>
+                <span class="header-links header-sign"><a href="/dashboard">Dashboard</a></span>
+                <span class="header-links header-sign"><a href="/logout">Logout</a></span>
+            <% } %>
+        </div>
+    </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="#/login">Login</a></li>
-                <li><a href="#/register">Register</a></li>
-
-            </ul>
-
-        </div><!-- /.navbar-collapse -->
-    </nav>
-
-    <div class="container">
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="jumbotron">
-                    <h2>Welcome to Noteable</h2>
-                    
-                </div>
+    <div class="section active" id="home-view">
+        <div class="color-white" id="body-container">
+            <div id="splash-text">
+                <h1> Real-time digitalization of notes with <span id="content-title">Noteable</span></h1>
             </div>
+            <a id="sign-in" href="/register">Get Started</a>
         </div>
-        <div class="row">
-            <div class="col-md-10 col-offset1">
-                <div ng-view></div>
-            </div>
-        </div>
-
-        <hr/>
     </div>
 
 </body>

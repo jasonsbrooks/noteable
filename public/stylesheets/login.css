@@ -1,0 +1,140 @@
+
+*{margin:0;padding:0;}
+
+body{
+    background: url("/images/furley_bg.png") repeat center center;
+  background-attachment: fixed;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+}
+
+
+.logo-wrapper {
+  background-color: #672F00;
+  height: 50px;
+  text-align: center;
+
+}
+.logo-wrapper > img {
+  height: 35px;
+  position: relative;
+  top: 10px;
+}
+
+.button{
+  width:100px;
+  background:#672F00;
+  margin:0 auto;
+  margin-top:1%;
+  padding:10px;
+  text-align:center;
+  text-decoration:none;
+  color:#fff;
+  cursor:pointer;
+  transition:background .3s;
+  -webkit-transition:background .3s;
+}
+
+.inline-button-left {
+	width: 25%;
+	float: left;
+	padding:15px;
+}
+
+.inline-button-right {
+	width: 25%;
+	float: right;
+	padding: 15px;
+}
+
+#account-options-container {
+	margin: 0 auto;
+	width: 261px;
+	height: 50px;
+}
+
+#accounts-body {
+	padding-top: 100px;
+}
+
+/*.button:hover{
+  background:#2288bb;
+}*/
+
+#triangle-container {
+	width: 400px;
+	margin: 0 auto;
+	padding-top: 8px;
+}
+
+#login, #register{
+  width:400px;
+  margin:0 auto;
+  margin-bottom:2%;
+  transition:opacity 1s;
+  -webkit-transition:opacity 1s;
+}
+
+#triangle{
+  width:0;
+  border-top:12x solid transparent;
+  border-right:12px solid transparent;
+  border-bottom:12px solid #672F00;
+  border-left:12px solid transparent;
+  margin-left: 106px;
+}
+
+#login h1, #register h1{
+  background:#672F00;
+  padding:20px 0;
+  font-size:140%;
+  font-weight:300;
+  text-align:center;
+  color:#fff;
+}
+
+.warnings {
+  background:#672F00;
+  padding:20px 0;
+  font-size:140%;
+  font-weight:300;
+  text-align:center;
+  color:#fff;
+}
+
+form{
+  background:#FFFCF8;
+  padding:6% 4%;
+}
+
+input[type="email"],input[type="password"],input[type="text"]{
+  width:100%;
+  background:#fff;
+  margin-bottom:4%;
+  border:1px solid #ccc;
+  padding:4%;
+  font-family:'Lato',sans-serif;
+  font-size:95%;
+  color:#555;
+}
+
+input[type="submit"]{
+  width:100%;
+  background:#672F00;
+  border:0;
+  padding:4%;
+  font-family:'Lato',sans-serif;
+  font-size:100%;
+  color:#fff;
+  cursor:pointer;
+  transition:background .3s;
+  -webkit-transition:background .3s;
+}
+
+/*input[type="submit"]:hover{
+  background:#2288bb;
+}
+*/
+.form-element {
+  box-shadow: 0px 0px 10px 3px rgba(0,0,0,0.25);
+}

@@ -34,12 +34,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
+
 app.use(session({
   secret: process.env.NOTEABLE_SECRET_KEY,
   resave: false,
   saveUninitialized: true
 }))
-
 app.use(passport.initialize());
 app.use(passport.session());
 
