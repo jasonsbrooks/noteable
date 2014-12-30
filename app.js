@@ -7,7 +7,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
-var session = require('express-session')
+var session = require('cookie-session')
 
 
 var config;
@@ -37,9 +37,7 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 app.use(session({
   secret: process.env.NOTEABLE_SECRET_KEY,
-  resave: false,
-  saveUninitialized: true
-}))
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
