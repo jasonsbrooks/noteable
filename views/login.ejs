@@ -1,0 +1,51 @@
+<html lang="en">
+	<head>
+	    <% include partials/template/head.ejs %>
+	    <% include partials/template/cssdefaults.ejs %>
+	    <link rel="stylesheet" type="text/css" href="/stylesheets/login.css" />
+	    <% include partials/template/jsdefaults.ejs %>
+	    <script type="text/javascript" src="/javascripts/login.js"></script>
+	</head>
+    <head>
+        
+        
+        
+    </head>
+    <body>
+        <div id="accounts-body">
+            <div id="account-options-container">
+                <span href="#" class="button inline-button-left form-element" id="toggle-login">Log in</span>
+                <span href="#" class="button inline-button-right form-element" id="toggle-register">Register</span>
+            </div>
+            <div id="triangle-container">
+                <div id="triangle"></div>
+            </div>
+            <div id="login">
+                <!-- <h1 class="form-element">Noteable</h1> -->
+                    <div class="logo-wrapper">
+            <img src="/images/logo-white.png">
+            </div>
+                <form action='/login' method="POST" class="form-element">
+                    <input type="email" name="username" placeholder="Email" required />
+                    <input type="password" name="password" placeholder="Password" required />
+                    <input type="submit" value="Log in"/>
+                </form>
+            </div>
+
+            <div id="register" style="display:none;">
+
+                <div class="logo-wrapper">
+                    <img src="/images/logo-white.png">
+                </div>          <!-- <h1 class="form-element">Noteable</h1> -->
+                <form action='/register' method="POST" class="form-element">
+                    <input type="text" name="name" placeholder="Name" required />
+                    <input type="email" name="email" placeholder="Email" required />
+                    <input type="password" name="password" placeholder="Password" required />
+                    <input type="password" name="passwordc" placeholder="Confirm Password" required />
+                    <input type="submit" value="Register" />
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
+
