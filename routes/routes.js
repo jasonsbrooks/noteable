@@ -1,13 +1,13 @@
 module.exports = function(app, passport) {
 
-    app.get('/', function(req, res){
+    app.get('/', function(req, res) {
         res.render('index', { 
             title: 'Noteable',
             user: req.user 
         });    });
 
     //auth
-    app.get('/login', function(req, res){
+    app.get('/login', function(req, res) {
         res.render('login', { title: 'Login' });
     });
 
@@ -29,7 +29,7 @@ module.exports = function(app, passport) {
 
     });
 
-    app.get('/register', function(req, res){
+    app.get('/register', function(req, res) {
         res.render('login', { title: 'Register' });
     });
 
@@ -53,19 +53,19 @@ module.exports = function(app, passport) {
         })(req, res, next);
     });
 
-    app.get('/logout', isLoggedIn, function(req, res){
+    app.get('/logout', isLoggedIn, function(req, res) {
         req.logout();
         res.redirect('/');
     });
 
-    app.get('/editor', isLoggedIn, function(req, res){
+    app.get('/editor', isLoggedIn, function(req, res) {
         res.render('editor', {
             title: 'Editor',
             user: req.user
         });
     });
 
-    app.get('/dashboard', isLoggedIn, function(req, res){
+    app.get('/dashboard', isLoggedIn, function(req, res) {
         res.render('dashboard', {
             title: 'Dashboard',
             user: req.user
