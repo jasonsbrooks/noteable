@@ -18,7 +18,6 @@
     "express-session": "^1.9.3",
     "fs": "0.0.2",
     "jade": "~1.6.0",
-    "medium-editor": "^1.9.13",
     "morgan": "~1.3.0",
     "passport": "*",
     "passport-local": "*",
