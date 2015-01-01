@@ -43,3 +43,17 @@ h1{
   width: 1024px;
   margin: 0 auto;
 }
+
+
+#logo {
+/*  position: fixed;
+*/  z-index: 10000000;
+}
+
+#logo > img {
+  height: 50px;
+  position: relative;
+  top: 13px;
+  left: 2em;
+}
+

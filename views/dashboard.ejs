@@ -9,14 +9,18 @@
 <body>
 
 	<div id="main-container">
-		<header>
-			<a href="/dashboard" id="logo"><img src="/images/logo-white.png"></span></a>
-
-			<h1 class="account-name"><a href="/logout" class="logout">Log Out</a> | <%= user.username %> </h1>
-		</header>
+		<% include partials/template/header.ejs %>
 		<div id="documents-container">
 			<div class="section group">
-
+				<a href="/editor">
+					<div class="col span_1_of_3" id="newDoc">
+						<div class="box">
+							<span>New Doc</span><br>
+						</div>
+						<div class="doc">
+						</div>
+					</div>
+				</a>
 			</div>
 			
 		</div>

@@ -7,31 +7,10 @@
 </head>
 
 <body>
-    <div id="header">
-        <div id="name-container">
-            <a href="/#home" id="logo"><img src="/images/logo-white.png"></span></a>
-            
-        </div>
-        <div id="links-container">
-            <% if (typeof user == 'undefined') { %>
-                <span class="header-links header-sign"><a href="/login">Login</a></span>
-                <span class="header-links header-sign"><a href="/register">Register</a></span>
-            <% } else { %>
-            <% console.log(user) %>
-                <span class="header-links header-sign"><a href="/dashboard">Dashboard</a></span>
-                <span class="header-links header-sign"><a href="/logout">Logout</a></span>
-            <% } %>
-        </div>
-    </div>
-
-    <div class="section active" id="home-view">
-        <div class="color-white" id="body-container">
-            <div id="splash-text">
-                <h1> Real-time digitalization of notes with <span id="content-title">Noteable</span></h1>
-            </div>
-            <a id="sign-in" href="/register">Get Started</a>
-        </div>
-    </div>
+<div id="main-container">
+    <% include partials/template/header.ejs %>
+    
+</div>
 
 </body>
 </html>

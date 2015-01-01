@@ -63,18 +63,6 @@ padding-left: 60px;
   }
 }
 
-#logo {
-/*  position: fixed;
-*/  z-index: 10000000;
-}
-
-#logo > img {
-  height: 50px;
-  position: relative;
-  top: 13px;
-  left: 2em;
-}
-
 .box{
   width: 250px;
   height: 85px;
