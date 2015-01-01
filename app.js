@@ -70,26 +70,22 @@ function initDBConnection() {
                     userdb.insert({ username:admin_user, password:hash_pass, email: admin_email }, function(err, body) {
                         if (!err) {
                             console.log("Admin User was created!");
-                            var index0 = {name:index_fields[0], type:'json', index:{fields:[index_fields[0]]}};
-                            userdb.index(index0, function(err, body) {
-                                if (!err) {
-                                    console.log("Index " +index_fields[0]+ " was created!");
-                                } else {
-                                    console.log(err.reason);
-                                }
-                            });
-                            var index1 = {name:index_fields[1], type:'json', index:{fields:[index_fields[1]]}};
-                            userdb.index(index1, function(err, body) {
-                                if (!err) {
-                                    console.log("Index " +index_fields[1]+ " was created!");
-                                } else {
-                                    console.log(err.reason);
-                                }
-                            });
+                            //indexes
+                            var i;
 
+                            for (i = 0; i < index_fields.length; i++) {
+                                var index = {name:index_fields[i], type:'json', index:{fields:[index_fields[i]]}};
+                                console.log(index);
+                                userdb.index(index, function(err, body) {
+                                    if (!err) {
+                                        console.log("Index created!");
+                                    } else {  
+                                        console.log(err.reason);
+                                    }
+                                });
+                            }
                         } else {
                             console.log(err.reason);
-
                         }
                     });
                 }

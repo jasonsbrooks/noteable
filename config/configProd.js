@@ -4,7 +4,7 @@ config.cloudant.dbName = 'noteable';
 config.admin_user = 'minhtri';
 config.admin_password = 'pham';
 config.admin_email = 'minhtri@pham.cz';
-config.index_fields = ['username', 'email'];
+config.index_fields = ['username', 'email', 'doc_id'];
 
 
 if(process.env.VCAP_SERVICES) {

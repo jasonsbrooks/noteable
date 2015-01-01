@@ -6,6 +6,7 @@ module.exports = function(app, passport) {
             user: req.user 
         });    });
 
+    //auth
     app.get('/login', function(req, res){
         res.render('login', { title: 'Login' });
     });
@@ -52,7 +53,19 @@ module.exports = function(app, passport) {
         })(req, res, next);
     });
 
-        app.get('/dashboard', isLoggedIn, function(req, res){
+    app.get('/logout', isLoggedIn, function(req, res){
+        req.logout();
+        res.redirect('/');
+    });
+
+    app.get('/editor', isLoggedIn, function(req, res){
+        res.render('editor', {
+            title: 'Editor',
+            user: req.user
+        });
+    });
+
+    app.get('/dashboard', isLoggedIn, function(req, res){
         res.render('dashboard', {
             title: 'Dashboard',
             user: req.user
@@ -61,10 +74,8 @@ module.exports = function(app, passport) {
 
 
 
-    app.get('/logout', isLoggedIn, function(req, res){
-        req.logout();
-        res.redirect('/');
-    });
+
+
 
     function isLoggedIn(req, res, next) {
         // if user is authenticated in the session, carry on
