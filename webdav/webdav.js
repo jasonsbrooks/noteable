@@ -1,4 +1,5 @@
 "use strict";
+
 var jsDAV = require("jsDAV/lib/jsdav");
 // setting debugMode to TRUE outputs a LOT of information to console
 jsDAV.debugMode = false;
@@ -12,9 +13,17 @@ var jsDAV_Auth_Backend_File = require("jsDAV/lib/DAV/plugins/auth/file");
 // perl -i -pe "chomp if eof" ./htdigest
 // I will probably fork jsDAV to add Cloudant Auth
 
-jsDAV.createServer({
-    node: __dirname + "/data",
-    locksBackend: jsDAV_Locks_Backend_FS.new(__dirname + "/data"),
-    authBackend:  jsDAV_Auth_Backend_File.new(__dirname + "/htdigest"),
-    realm: "noteable"
-}, process.env.WEBDAV_PORT || 8000);
+module.exports = {};
+module.exports.listen = function(callback) {
+    var server = jsDAV.createServer({
+        node: __dirname + "/data",
+        locksBackend: jsDAV_Locks_Backend_FS.new(__dirname + "/data"),
+        authBackend:  jsDAV_Auth_Backend_File.new(__dirname + "/htdigest"),
+        realm: "noteable"
+    }, process.env.WEBDAV_PORT || 8000);
+
+    if (callback) {
+        process.nextTick(callback);
+    }
+    return server;
+};

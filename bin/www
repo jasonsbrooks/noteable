@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-var config = require('../config/config'),
-    webdav = require('../webdav/webdav');
+var chalk = require('chalk'),
+    config = require('../config/config');
 
 console.log('---------------------------');
 var Cloudant = require('../config/cloudant').initialize(config);
@@ -14,6 +14,12 @@ Cloudant.testDbConnection(function(err, db) {
 
     var server = app.listen(app.get('port'), function(err) {
         console.log(chalk.green('Express server listening on port ' + server.address().port));
+
+        // launch webdav server
+        var webdav = require('../webdav/webdav').listen(function() {
+            console.log(chalk.green('Webdav server listening on port ' + webdav.address().port) + '\n');
+        });
+
     }).on( 'error', function (e) {
         if (e.code == 'EADDRINUSE') {
             console.error(chalk.red('Could not start server: port in use'));
