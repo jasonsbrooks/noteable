@@ -33,7 +33,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 app.use(session({
   secret: process.env.NOTEABLE_SECRET_KEY,
@@ -64,21 +63,30 @@ function initDBConnection() {
                     var dbname = config.cloudant.dbName;
                     var admin_user = config.admin_user;
                     var admin_pass = config.admin_password;
-                    var index_field = config.index_field;
+                    var admin_email = config.admin_email;
+                    var index_fields = config.index_fields;
                     var hash_pass = bcrypt.hashSync(admin_pass, 10);
                     var userdb = Cloudant.use(dbname);
-                    userdb.insert({ username:admin_user, password:hash_pass }, function(err, body) {
+                    userdb.insert({ username:admin_user, password:hash_pass, email: admin_email }, function(err, body) {
                         if (!err) {
                             console.log("Admin User was created!");
-                            var username_idx = {name:'username', type:'json', index:{fields:[index_field]}};
-                            userdb.index(username_idx, function(err, body) {
+                            var index0 = {name:index_fields[0], type:'json', index:{fields:[index_fields[0]]}};
+                            userdb.index(index0, function(err, body) {
                                 if (!err) {
-                                    console.log("Index " +index_field+ " was created!");
+                                    console.log("Index " +index_fields[0]+ " was created!");
                                 } else {
                                     console.log(err.reason);
-
                                 }
                             });
+                            var index1 = {name:index_fields[1], type:'json', index:{fields:[index_fields[1]]}};
+                            userdb.index(index1, function(err, body) {
+                                if (!err) {
+                                    console.log("Index " +index_fields[1]+ " was created!");
+                                } else {
+                                    console.log(err.reason);
+                                }
+                            });
+
                         } else {
                             console.log(err.reason);
 

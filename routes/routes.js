@@ -4,9 +4,7 @@ module.exports = function(app, passport) {
         res.render('index', { 
             title: 'Noteable',
             user: req.user 
-        });
-        // console.log("Session: %j", req.user);
-    });
+        });    });
 
     app.get('/login', function(req, res){
         res.render('login', { title: 'Login' });
@@ -14,36 +12,54 @@ module.exports = function(app, passport) {
 
     app.post('/login', function(req, res, next) {
         passport.authenticate('local-login', function(err, user, info) {
-            user = req.body;
-            if (err || !user) { res.status(500).json(info); }
-            else {
+            if (err || !user) { 
+                return res.redirect('/login');
+            } else {
+                console.log(user)
                 req.logIn(user, function(err) {
-                    if (err) { res.status(500).json(err); }
-                    else { res.status(200).send(); }  
+                    if (err) { 
+                        return res.redirect('/login');
+                    } else { 
+                        return res.redirect('/dashboard')
+                    }  
+                })      
+            }
+        })(req, res, next);
+
+    });
+
+    app.get('/register', function(req, res){
+        res.render('login', { title: 'Register' });
+    });
+
+
+    
+    app.post('/register',  function(req, res, next) {
+        passport.authenticate('local-signup', function(err, user, info) {
+            console.log("In Passport Register Route");
+            if (err || !user) { 
+                return res.redirect('/register');
+            } else {
+                console.log(user)
+                req.logIn(user, function(err) {
+                    if (err) { 
+                        return res.redirect('/register');
+                    } else { 
+                        return res.redirect('/dashboard')
+                    }  
                 })      
             }
         })(req, res, next);
     });
 
-    app.get('/dashboard', isLoggedIn, function(req, res){
+        app.get('/dashboard', isLoggedIn, function(req, res){
         res.render('dashboard', {
             title: 'Dashboard',
             user: req.user
         });
     });
 
-    // app.post('/api/register',  function(req, res, next) {
-    //   passport.authenticate('local-signup', function(err, user, info) {
-    //     console.log("In Passport Register Route");
-    //     if (err || !user) { res.status(500).json(info); }
-    //     else {
-    //         req.logIn(user, function(err) {
-    //             if (err) { res.status(500).json(err); }
-    //             else { res.status(200).send(); }  
-    //         })      
-    //     }
-    //   })(req, res, next);
-    // });
+
 
     app.get('/logout', isLoggedIn, function(req, res){
         req.logout();
