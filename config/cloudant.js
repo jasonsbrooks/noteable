@@ -1,35 +1,60 @@
+"use strict";
 
-var config = null;
+var initialized = false;
+var cloudConfig = null;
 
-
-module.exports.initialize = function(config) {
-    var Cloudant = require('cloudant')({
-        account: config.cloudant.user,
-        password: config.cloudant.password,
-        url: config.cloudant.url
+var reqCloudant = function() {
+    return require('cloudant')({
+        account: cloudConfig.cloudant.user,
+        password: cloudConfig.cloudant.password,
+        url: cloudConfig.cloudant.url
     });
-
-    testDbConnection(config.dbName);
 };
 
-var testDbConnection = module.exports.testDbConnection = function() {
-    Cloudant.ping(function(er, reply) {
-        if (er)
-            return console.log('Failed to ping Cloudant. Did the network just go down?');
-            else {
-                console.log('Cloudant connection was successful');
+var dbConnection = module.exports.dbConnection = function(next) {
+    if (!cloudConfig || !initialized) {
+        if (next) {
+            next(new Error('Cannot connect to uninitialized db.'), null);
+        }
+        return;
+    }
 
+    var Cloudant = reqCloudant();
+
+    if (next) {
+        next(null, Cloudant);
+    }
+    return;
+}
+
+var testDbConnection = module.exports.testDbConnection = function(next) {
+    dbConnection(function(err, Cloudant) {
+        if (err || !Cloudant) {
+            if (next) {
+                next(new Error('Database not initialized.'), null);
+            }
+            return null;
+        }
+
+        Cloudant.ping(function(er, reply) {
+            if (er) {
+                if (next) {
+                    next(new Error('Failed to ping Cloudant. Did the network just go down?'));
+                }
+                return;
+            }
+            else {
                 //check if DB exists if not create
-                Cloudant.db.create(config.cloudant.dbName, function (err, res) {
+                Cloudant.db.create(cloudConfig.cloudant.dbName, function (err, res) {
                     if (err) {
-                        console.log("Database already created");
+                        console.log("Database %s already existed", cloudConfig.cloudant.dbName);
                     } else {
-                        console.log("Created Noteable");
-                        var dbname = config.cloudant.dbName;
-                        var admin_user = config.admin_user;
-                        var admin_pass = config.admin_password;
-                        var admin_email = config.admin_email;
-                        var index_fields = config.index_fields;
+                        console.log("Created new database \"%s\"", cloudConfig.cloudant.dbName);
+                        var dbname = cloudConfig.cloudant.dbName;
+                        var admin_user = cloudConfig.admin_user;
+                        var admin_pass = cloudConfig.admin_password;
+                        var admin_email = cloudConfig.admin_email;
+                        var index_fields = cloudConfig.index_fields;
                         var hash_pass = bcrypt.hashSync(admin_pass, 10);
                         var userdb = Cloudant.use(dbname);
                         userdb.insert({ username:admin_user, password:hash_pass, email: admin_email }, function(err, body) {
@@ -50,11 +75,39 @@ var testDbConnection = module.exports.testDbConnection = function() {
                                     });
                                 }
                             } else {
-                                console.log(err.reason);
+                                console.error(err.reason);
                             }
                         });
+                    }
+                    if (next) {
+                        next(null);
                     }
                 });
             }
         });
+    });
+};
+
+module.exports.initialize = function(config) {
+    console.log('Initializing database...');
+    var s = (!!config.cloudant &&
+             !!config.cloudant.user &&
+             !!config.cloudant.password &&
+             !!config.cloudant.url &&
+             !!config.cloudant.dbName);
+    console.assert(config.cloudant, "cloudant config is not null");
+    console.assert(config.cloudant.user, "user is not null");
+    console.assert(config.cloudant.password, "password is not null");
+    console.assert(config.cloudant.url, "url is not null");
+    console.assert(config.cloudant.dbName, "dbName is not null");
+
+    if (s) {
+        cloudConfig = config;
+        initialized = true;
+        console.log('Database initialized successfully.');
+        return reqCloudant();
+    } else {
+        console.log('Database initialization failed.');
+    }
+    return null;
 };

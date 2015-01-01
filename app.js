@@ -16,8 +16,11 @@ if (app.get('env') === 'production') {
 } else {
     config = require('./config/configDev.js');
 }
+
+var Cloudant = require('./config/cloudant').initialize(config);
+
 //passport setup
-var passport = require('./config/passport')(config);
+var passport = require('./config/passport')(config, Cloudant);
 
 
 //config
@@ -43,9 +46,6 @@ app.use(passport.session());
 
 
 require('./routes/routes.js')(app, passport);
-
-var Cloudant = require('./config/cloudant')(config);
-
 
 
 module.exports = app;

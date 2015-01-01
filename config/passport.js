@@ -2,9 +2,7 @@
 var LocalStrategy   = require('passport-local').Strategy;
 var passport = require('passport');
 
-module.exports = function(config) {
-
-    var Cloudant = require('cloudant')({account:config.cloudant.user, password:config.cloudant.password, url:config.cloudant.url});
+module.exports = function(config, Cloudant) {
 
     var bcrypt = require('bcrypt');
     var dbname = config.cloudant.dbName;
@@ -92,7 +90,7 @@ module.exports = function(config) {
                     if (err){
                         console.log("There was an error registering the user: " + err);
                         return done(null, false, { message : "There was an error connecting to Cloudant" } );
-                    } 
+                    }
                     else if (result.docs.length > 0){
                         console.log("Email was found");
                         return done(null, false, { message : "This email is already registered with a different account." } );
@@ -113,7 +111,7 @@ module.exports = function(config) {
                     })
                 });
 
-                
+
             })
         }
     ));
