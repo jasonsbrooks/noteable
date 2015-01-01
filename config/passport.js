@@ -1,9 +1,10 @@
 // load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
+var passport = require('passport');
 
-module.exports = function(passport, config) {
-    
-    var Cloudant = require('cloudant')({account:config.cloudant.user, password:config.cloudant.password});
+module.exports = function(config) {
+
+    var Cloudant = require('cloudant')({account:config.cloudant.user, password:config.cloudant.password, url:config.cloudant.url});
 
     var bcrypt = require('bcrypt');
     var dbname = config.cloudant.dbName;
@@ -33,7 +34,7 @@ module.exports = function(passport, config) {
                 if (err){
                     console.log("There was an error finding the user: " + err);
                     return done(null, false, { message : "There was an error connecting to the database" } );
-                } 
+                }
                 if (result.docs.length == 0){
                     console.log("Username was not found");
                     return done(null, false, { message : "Username was not found" } );
@@ -49,7 +50,7 @@ module.exports = function(passport, config) {
                     console.log("Password is not correct");
                     //err = {"reason":"Password is incorrect"};
                     return done(null, false, { message :"Password is incorrect"} );
-                }                
+                }
             })
         }
     ));
@@ -67,7 +68,7 @@ module.exports = function(passport, config) {
                 if (err){
                     console.log("There was an error registering the user: " + err);
                     return done(null, false, { message : "There was an error connecting to Cloudant" } );
-                } 
+                }
                 else if (result.docs.length > 0){
                     console.log("Username was found");
                     return done(null, false, { message : "This username already exists. Choose a different username." } );
@@ -90,4 +91,5 @@ module.exports = function(passport, config) {
         }
     ));
 
+    return passport;
 }
