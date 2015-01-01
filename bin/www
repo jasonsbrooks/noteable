@@ -1,13 +1,6 @@
 #!/usr/bin/env node
-var debug = require('debug')('noteable');
-var chalk = require('chalk');
-
-var config;
-if (process.env.NODE_ENV === 'production') {
-    config = require('../config/configProd.js');
-} else {
-    config = require('../config/configDev.js');
-}
+var chalk = require('chalk'),
+    config = require('../config/config');
 
 console.log('---------------------------');
 var Cloudant = require('../config/cloudant').initialize(config);
