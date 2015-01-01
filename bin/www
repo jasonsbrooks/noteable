@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-var chalk = require('chalk'),
-    config = require('../config/config');
+var config = require('../config/config'),
+    webdav = require('../webdav/webdav');
 
 console.log('---------------------------');
 var Cloudant = require('../config/cloudant').initialize(config);
