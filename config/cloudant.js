@@ -3,7 +3,7 @@
 var initialized = false;
 var cloudConfig = null;
 
-var reqCloudant = function() {
+var dbConnection = module.exports.dbConnection = function() {
     return require('cloudant')({
         account: cloudConfig.cloudant.user,
         password: cloudConfig.cloudant.password,
@@ -11,80 +11,66 @@ var reqCloudant = function() {
     });
 };
 
-var dbConnection = module.exports.dbConnection = function(next) {
-    if (!cloudConfig || !initialized) {
+
+module.exports.testDbConnection = function(next) {
+    var connection = dbConnection();
+    if (!connection) {
         if (next) {
-            next(new Error('Cannot connect to uninitialized db.'), null);
+            next(new Error('Database not initialized.'), null);
         }
-        return;
+        return null;
     }
 
-    var Cloudant = reqCloudant();
-
-    if (next) {
-        next(null, Cloudant);
-    }
-    return;
-}
-
-var testDbConnection = module.exports.testDbConnection = function(next) {
-    dbConnection(function(err, Cloudant) {
-        if (err || !Cloudant) {
+    connection.ping(function(er, reply) {
+        if (er) {
             if (next) {
-                next(new Error('Database not initialized.'), null);
+                next(new Error('Failed to ping Cloudant. Did the network just go down?'));
             }
-            return null;
+            return;
         }
+        else {
+            //check if DB exists if not create
+            console.log('Checking if "%s" exists...', cloudConfig.cloudant.dbName)
+            
+            connection.db.create(cloudConfig.cloudant.dbName, function (err, res) {
+                if (err) {
+                    console.log('"%s" already exits', cloudConfig.cloudant.dbName);
+                } else {
+                    console.log('Created "%s"', cloudConfig.cloudant.dbName);
+                    var dbname = cloudConfig.cloudant.dbName;
+                    var admin_user = cloudConfig.admin_user;
+                    var admin_pass = cloudConfig.admin_password;
+                    var admin_email = cloudConfig.admin_email;
+                    var index_fields = cloudConfig.index_fields;
+                    var hash_pass = bcrypt.hashSync(admin_pass, 10);
+                    var userdb = Cloudant.use(dbname);
+                    userdb.insert({ username:admin_user, password:hash_pass, email: admin_email }, function(err, body) {
+                        if (!err) {
+                            console.log("Admin User was created!");
+                            //indexes
+                            var i;
 
-        Cloudant.ping(function(er, reply) {
-            if (er) {
-                if (next) {
-                    next(new Error('Failed to ping Cloudant. Did the network just go down?'));
-                }
-                return;
-            }
-            else {
-                //check if DB exists if not create
-                Cloudant.db.create(cloudConfig.cloudant.dbName, function (err, res) {
-                    if (err) {
-                        console.log("Database %s already existed", cloudConfig.cloudant.dbName);
-                    } else {
-                        console.log("Created new database \"%s\"", cloudConfig.cloudant.dbName);
-                        var dbname = cloudConfig.cloudant.dbName;
-                        var admin_user = cloudConfig.admin_user;
-                        var admin_pass = cloudConfig.admin_password;
-                        var admin_email = cloudConfig.admin_email;
-                        var index_fields = cloudConfig.index_fields;
-                        var hash_pass = bcrypt.hashSync(admin_pass, 10);
-                        var userdb = Cloudant.use(dbname);
-                        userdb.insert({ username:admin_user, password:hash_pass, email: admin_email }, function(err, body) {
-                            if (!err) {
-                                console.log("Admin User was created!");
-                                //indexes
-                                var i;
-
-                                for (i = 0; i < index_fields.length; i++) {
-                                    var index = {name:index_fields[i], type:'json', index:{fields:[index_fields[i]]}};
-                                    console.log(index);
-                                    userdb.index(index, function(err, body) {
-                                        if (!err) {
-                                            console.log("Index created!");
-                                        } else {
-                                            console.log(err.reason);
-                                        }
-                                    });
-                                }
-                            } else {
-                                console.error(err.reason);
+                            for (i = 0; i < index_fields.length; i++) {
+                                var index = {name:index_fields[i], type:'json', index:{fields:[index_fields[i]]}};
+                                console.log(index);
+                                userdb.index(index, function(err, body) {
+                                    if (!err) {
+                                        console.log("Index created!");
+                                    } else {
+                                        console.log(err.reason);
+                                    }
+                                });
                             }
-                        });
-                    }
-                    if (next) {
-                        next(null);
-                    }
-                });
-            }
-        });
+                        } else {
+                            console.error(err.reason);
+                        }
+                    });
+                }
+                if (next) {
+                    next(null);
+                }
+            });
+        }
     });
 };
 
@@ -105,7 +91,7 @@ module.exports.initialize = function(config) {
         cloudConfig = config;
         initialized = true;
         console.log('Database initialized successfully.');
-        return reqCloudant();
+        return module.exports;
     } else {
         console.log('Database initialization failed.');
     }

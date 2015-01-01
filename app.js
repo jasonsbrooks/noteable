@@ -18,9 +18,11 @@ if (app.get('env') === 'production') {
 }
 
 var Cloudant = require('./config/cloudant').initialize(config);
+Cloudant.testDbConnection();
+
 
 //passport setup
-var passport = require('./config/passport')(config, Cloudant);
+var passport = require('./config/passport')(config, Cloudant.dbConnection());
 
 
 //config
