@@ -1,9 +1,32 @@
 #!/usr/bin/env node
 var debug = require('debug')('noteable');
-var app = require('../app');
+var chalk = require('chalk');
 
-app.set('port', process.env.PORT || 3000);
+var config;
+if (process.env.NODE_ENV === 'production') {
+    config = require('../config/configProd.js');
+} else {
+    config = require('../config/configDev.js');
+}
 
-var server = app.listen(app.get('port'), function() {
-  debug('Express server listening on port ' + server.address().port);
+console.log('---------------------------');
+var Cloudant = require('../config/cloudant').initialize(config);
+Cloudant.testDbConnection(function(err, db) {
+
+    console.log('---------------------------\n');
+
+    var app = require('../app')(config, db);
+
+    app.set('port', process.env.PORT || 3000);
+
+    var server = app.listen(app.get('port'), function(err) {
+        console.log(chalk.green('Express server listening on port ' + server.address().port));
+    }).on( 'error', function (e) {
+        if (e.code == 'EADDRINUSE') {
+            console.error(chalk.red('Could not start server: port in use'));
+        } else {
+            console.error(chalk.red(e.message));
+        }
+    });;
+
 });

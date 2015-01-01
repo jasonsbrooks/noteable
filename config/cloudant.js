@@ -1,4 +1,5 @@
 "use strict";
+var chalk = require('chalk');
 
 var initialized = false;
 var cloudConfig = null;
@@ -12,11 +13,18 @@ var dbConnection = module.exports.dbConnection = function() {
 };
 
 
-module.exports.testDbConnection = function(next) {
+module.exports.testDbConnection = function(callback) {
     var connection = dbConnection();
+    process.stdout.write('Testing db connection...\t');
+
+    var next = function(err, db, didCreateDefault) {
+        process.stdout.write(!!err ? chalk.red('✖\n') : chalk.green('✓\n'));
+        callback(err,db,didCreateDefault);
+    }
+
     if (!connection) {
         if (next) {
-            next(new Error('Database not initialized.'), null);
+            next(new Error('Database not initialized.'), null, undefined);
         }
         return null;
     }
@@ -24,19 +32,19 @@ module.exports.testDbConnection = function(next) {
     connection.ping(function(er, reply) {
         if (er) {
             if (next) {
-                next(new Error('Failed to ping Cloudant. Did the network just go down?'));
+                next(er, null, undefined);
             }
             return;
         }
         else {
             //check if DB exists if not create
-            console.log('Checking if "%s" exists...', cloudConfig.cloudant.dbName)
-            
             connection.db.create(cloudConfig.cloudant.dbName, function (err, res) {
                 if (err) {
-                    console.log('"%s" already exits', cloudConfig.cloudant.dbName);
+                    if (next) {
+                        next(null, connection, false);
+                    }
                 } else {
-                    console.log('Created "%s"', cloudConfig.cloudant.dbName);
+                    console.log('Created default db "%s"', cloudConfig.cloudant.dbName);
                     var dbname = cloudConfig.cloudant.dbName;
                     var admin_user = cloudConfig.admin_user;
                     var admin_pass = cloudConfig.admin_password;
@@ -64,10 +72,10 @@ module.exports.testDbConnection = function(next) {
                         } else {
                             console.error(err.reason);
                         }
+                        if (next) {
+                            next(err, connection, true);
+                        }
                     });
-                }
-                if (next) {
-                    next(null);
                 }
             });
         }
@@ -75,25 +83,25 @@ module.exports.testDbConnection = function(next) {
 };
 
 module.exports.initialize = function(config) {
-    console.log('Initializing database...');
+    process.stdout.write('Initializing database...\t');
     var s = (!!config.cloudant &&
              !!config.cloudant.user &&
              !!config.cloudant.password &&
              !!config.cloudant.url &&
              !!config.cloudant.dbName);
-    console.assert(config.cloudant, "cloudant config is not null");
-    console.assert(config.cloudant.user, "user is not null");
-    console.assert(config.cloudant.password, "password is not null");
-    console.assert(config.cloudant.url, "url is not null");
-    console.assert(config.cloudant.dbName, "dbName is not null");
+    console.assert(config.cloudant, chalk.red("cloudant config is not null"));
+    console.assert(config.cloudant.user, chalk.red("user is not null"));
+    console.assert(config.cloudant.password, chalk.red("password is not null"));
+    console.assert(config.cloudant.url, chalk.red("url is not null"));
+    console.assert(config.cloudant.dbName, chalk.red("dbName is not null"));
 
     if (s) {
         cloudConfig = config;
         initialized = true;
-        console.log('Database initialized successfully.');
+        process.stdout.write(chalk.green('✓\n'));
         return module.exports;
     } else {
-        console.log('Database initialization failed.');
+        process.stdout.write(chalk.red('✖\n'));
     }
     return null;
 };
