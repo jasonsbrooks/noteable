@@ -16,10 +16,9 @@ Cloudant.testDbConnection(function(err, db) {
         console.log(chalk.green('Express server listening on port ' + server.address().port));
 
         // launch webdav server
-        var webdav = require('../webdav/webdav').listen(function() {
+        var webdav = require('../webdav/webdav')(db).listen(function() {
             console.log(chalk.green('Webdav server listening on port ' + webdav.address().port) + '\n');
         });
-
     }).on( 'error', function (e) {
         if (e.code == 'EADDRINUSE') {
             console.error(chalk.red('Could not start server: port in use'));

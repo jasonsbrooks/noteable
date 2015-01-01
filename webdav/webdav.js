@@ -13,8 +13,7 @@ var jsDAV_Auth_Backend_File = require("jsDAV/lib/DAV/plugins/auth/file");
 // perl -i -pe "chomp if eof" ./htdigest
 // I will probably fork jsDAV to add Cloudant Auth
 
-module.exports = {};
-module.exports.listen = function(callback) {
+function listen(callback) {
     var server = jsDAV.createServer({
         node: __dirname + "/data",
         locksBackend: jsDAV_Locks_Backend_FS.new(__dirname + "/data"),
@@ -26,4 +25,10 @@ module.exports.listen = function(callback) {
         process.nextTick(callback);
     }
     return server;
+}
+
+module.exports = function(db) {
+    return {
+        listen: listen
+    };
 };
