@@ -1,8 +1,11 @@
 var config = {};
 config.cloudant = {};
 config.cloudant.dbName = 'noteable';
-config.cloudant.admin_user = 'minhtri';
-config.cloudant.admin_password = 'pham';
+config.admin_user = 'minhtri';
+config.admin_password = 'pham';
+config.admin_email = 'minhtri@pham.cz';
+config.index_fields = ['username', 'email', 'doc_id'];
+
 
 if(process.env.VCAP_SERVICES) {
     var vcapServices = JSON.parse(process.env.VCAP_SERVICES);

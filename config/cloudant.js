@@ -13,40 +13,48 @@ module.exports.initialize = function(config) {
 };
 
 var testDbConnection = module.exports.testDbConnection = function() {
-    Cloudant.ping(function(err, reply) {
-        if (err) {
-            console.log('Failed to ping Cloudant. Did the network just go down?');
-        }
-        else {
-            console.log('Cloudant connection was successful');
+    Cloudant.ping(function(er, reply) {
+        if (er)
+            return console.log('Failed to ping Cloudant. Did the network just go down?');
+            else {
+                console.log('Cloudant connection was successful');
 
-            //check if DB exists if not create
-            Cloudant.db.create(config.dbName, function (err, res) {
-                if (err) {
-                    console.log("Database already created");
-                } else {
-                    console.log("Created Noteable");
-                    var hash_pass = bcrypt.hashSync(config.admin_password, 10);
+                //check if DB exists if not create
+                Cloudant.db.create(config.cloudant.dbName, function (err, res) {
+                    if (err) {
+                        console.log("Database already created");
+                    } else {
+                        console.log("Created Noteable");
+                        var dbname = config.cloudant.dbName;
+                        var admin_user = config.admin_user;
+                        var admin_pass = config.admin_password;
+                        var admin_email = config.admin_email;
+                        var index_fields = config.index_fields;
+                        var hash_pass = bcrypt.hashSync(admin_pass, 10);
+                        var userdb = Cloudant.use(dbname);
+                        userdb.insert({ username:admin_user, password:hash_pass, email: admin_email }, function(err, body) {
+                            if (!err) {
+                                console.log("Admin User was created!");
+                                //indexes
+                                var i;
 
-                    var db = Cloudant.use(config.dbname);
-                    db.insert({ username:config.admin_user, password:hash_pass }, function(err, body) {
-                        if (!err) {
-                            console.log("Admin User was created!");
-                            var username_idx = {name:'username', type:'json', index:{fields:[config.index_field]}};
-                            db.index(username_idx, function(err, body) {
-                                if (!err) {
-                                    console.log("Index " + index_field + " was created!");
-                                } else {
-                                    console.log(err.reason);
-
+                                for (i = 0; i < index_fields.length; i++) {
+                                    var index = {name:index_fields[i], type:'json', index:{fields:[index_fields[i]]}};
+                                    console.log(index);
+                                    userdb.index(index, function(err, body) {
+                                        if (!err) {
+                                            console.log("Index created!");
+                                        } else {
+                                            console.log(err.reason);
+                                        }
+                                    });
                                 }
-                            });
-                        } else {
-                            console.log(err.reason);
-                        }
-                    });
-                }
-            });
-        }
-    });
+                            } else {
+                                console.log(err.reason);
+                            }
+                        });
+                    }
+                });
+            }
+        });
 };

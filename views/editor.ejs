@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+    <% include partials/template/head.ejs %>
+    <% include partials/template/cssdefaults.ejs %>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/editor.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/medium-editor.css">
+    
+    <link rel="stylesheet" type="text/css" href="/stylesheets/themes/default.css" />
+    <% include partials/template/jsdefaults.ejs %>
+    <script src="javascripts/medium-editor.js"></script>
+    
+</head>
+
+<body>
+    <div id="main-container">
+        <% include partials/template/header.ejs %>
+        <div id="document-name" class="editable">Document Name</div>
+        <div id="editor-container">
+            <div class="editable" id="document-text">Type your text</div>
+        </div>
+
+        <div id="save-section">
+            <a href="#" class="button">Save</a>
+            <a href="#" class="button">Share</a>
+        </div>
+
+    </div>
+
+
+    <script>
+    var name = new MediumEditor('#document-name', {
+        targetBlank: true,
+        placeholder: ''
+    });
+    var text = new MediumEditor('#document-text', {
+        targetBlank: true,
+        placeholder: ''
+    });
+    </script>
+</body>
+</html>

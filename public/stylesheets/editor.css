@@ -1,0 +1,32 @@
+#document-name {
+	margin-top: 2em;
+	font-weight: bold;
+	font-size: 1.5em;
+}
+
+.editable {
+	background-color: #efefef;
+	border: solid 1px #cccccc;
+	outline: none;
+
+}
+
+#editor-container {
+	margin-top: 2em;	
+}
+
+#editor-container .editable {
+	min-height: 500px;
+	padding: 1em;
+
+}
+
+#save-section {
+	margin-top: 2em;
+}
+
+#save-section .button {
+	padding: 10px;
+	color: black;
+	background-color: #abcdef;
+}

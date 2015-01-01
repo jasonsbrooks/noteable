@@ -11,7 +11,7 @@ config.cloudant.url = process.env.CLOUDANT_URL;
 
 config.admin_user = 'minhtri';
 config.admin_password = 'pham';
-config.index_field = 'username';
-
+config.index_fields = ['username', 'email', 'doc_id'];
+config.admin_email = 'minhtri@pham.cz';
 
 module.exports = config;
