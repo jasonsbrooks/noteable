@@ -19,7 +19,9 @@ module.exports.testDbConnection = function(callback) {
 
     var next = function(err, db, didCreateDefault) {
         process.stdout.write(!!err ? chalk.red('✖\n') : chalk.green('✓\n'));
-        callback(err,db,didCreateDefault);
+        process.nextTick(function(){
+            callback(err,db,didCreateDefault);
+        });
     }
 
     if (!connection) {

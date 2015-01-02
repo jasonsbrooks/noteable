@@ -27,4 +27,26 @@ Cloudant.testDbConnection(function(err, db) {
         }
     });;
 
+    db.db.create('users', function(err, res) {
+
+        var Users = db.use('users');
+
+        Users.index({name:'username', type:'json', index:{fields:['username']}});
+
+        Users.find({selector: {username: 'mrosales'}}, function(err, result) {
+            if (err) {
+                console.log('Server error: ' + err);
+            } else if (result.docs.length == 0) {
+                console.log('User "mrosales" does not exist.');
+
+                Users.insert({username:'mrosales', realm:'noteable', password:'02765d4d26b8e45e1fcf0f66ea88ff39'});
+
+            } else {
+                var usr = result.docs[0];
+                // user already exists
+            }
+        });
+
+    });
+
 });
