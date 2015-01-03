@@ -1,4 +1,7 @@
+var cloudant = require('../config/cloudant.js').dbConnection();
+
 module.exports = function(app, passport) {
+    var db = cloudant.use('noteable');
 
     app.get('/', function(req, res) {
         res.render('index', { 
@@ -69,6 +72,39 @@ module.exports = function(app, passport) {
         res.render('dashboard', {
             title: 'Dashboard',
             user: req.user
+        });
+    });
+
+    app.post('/note/new', isLoggedIn, function(req, res) {
+        console.log("New note")
+        db.insert({
+            type: 'note',
+            name: 'Untitled document',
+            owner: req.user.username,
+            collaborators: [],
+            permission: 1,
+            time: Math.floor(new Date() / 1000)
+        }, function(err, doc) {
+            if (err) {
+                console.log(err);
+                res.send(500);
+            } else {
+                res.send(200);
+            }
+            res.end();
+        });
+    });
+
+    app.get('/api/list', isLoggedIn, function(req, res) {
+        // db.index({name:'type', type:'json', index:{fields:['type']}}, function(err, body) {
+        //     if (!err) {
+        //         console.log("Index created!");
+        //     } else {
+        //         console.log(err.reason);
+        //     }
+        // });
+        db.find({selector: {type: 'note'}}, function(err, body) {
+            res.json(err || body);
         });
     });
 
