@@ -81,7 +81,7 @@ module.exports = function(app, passport) {
             type: 'note',
             name: 'Untitled document',
             owner: req.user.username,
-            collaborators: [],
+            collaborators: [req.user.username],
             permission: 1,
             time: Math.floor(new Date() / 1000)
         }, function(err, doc) {
@@ -96,19 +96,21 @@ module.exports = function(app, passport) {
     });
 
     app.get('/api/list', isLoggedIn, function(req, res) {
-        // db.index({name:'type', type:'json', index:{fields:['type']}}, function(err, body) {
-        //     if (!err) {
-        //         console.log("Index created!");
-        //     } else {
-        //         console.log(err.reason);
-        //     }
-        // });
-        db.find({selector: {type: 'note'}}, function(err, body) {
+
+        db.find({selector: {type: 'note', collaborators: {$in: [req.user.username]}}}, function(err, body) {
             res.json(err || body);
         });
     });
 
-
+    // function makeIndex() {
+    //     db.index({name:'type', type:'json', index:{fields:['type']}}, function(err, body) {
+    //         if (!err) {
+    //             console.log("Index created!");
+    //         } else {
+    //             console.log(err.reason);
+    //         }
+    //     });
+    // }
 
 
 
