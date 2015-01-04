@@ -73,6 +73,7 @@ module.exports = function(app, passport) {
     });
 
 
+    require('./users.routes')(app, passport);
 
 
 
