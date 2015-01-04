@@ -1,4 +1,6 @@
 var cloudant = require('../config/cloudant.js').dbConnection();
+var uuid = require('uuid-js');
+var bcrypt = require('bcrypt');
 
 module.exports = function(app, passport) {
     var db = cloudant.use('noteable');
@@ -30,6 +32,48 @@ module.exports = function(app, passport) {
             }
         })(req, res, next);
 
+    });
+
+    app.post('/iphone-login', function(req, res) {
+        email = req.body.username;
+        password = req.body.password;
+        db.find({selector:{username:email}}, function(err, result) {
+            if (err){
+                console.log("There was an error finding the user: " + err);
+                return res.json({'success': 'false', 'code': '1'});
+            }
+            if (result.docs.length == 0){
+                console.log("Username was not found");
+                return res.json({'success': 'false', 'code': '1'});
+            }
+
+            // user was found, now determine if password matches
+            var user = result.docs[0];
+            if (bcrypt.compareSync(password, user.password)) {
+                console.log("Password matches");
+                 // all is well, return successful user
+                if (user.token) {
+                    var uuid4 = user.token;
+                } else {
+                    var uuid4 = uuid.create().toString();
+                    db.get(user._id, function(err, doc) {
+                        if (!err) {
+                            doc.token = uuid4;
+                            db.insert(doc, doc.id, function(err, doc) {
+                                // there should never be an error here
+                                // add stuff if there is an error later
+                            });
+                        }
+                    });
+                }
+                return res.json({'success': 'true', 'token': uuid4, 'code': '0'});
+            } else {
+                console.log("Password is not correct");
+                console.log(user.token);
+                //err = {"reason":"Password is incorrect"};
+                return res.json({'success': 'false', 'code': '2'});
+            }
+        })
     });
 
     app.get('/register', function(req, res) {
@@ -69,10 +113,14 @@ module.exports = function(app, passport) {
     });
 
     app.get('/dashboard', isLoggedIn, function(req, res) {
-        res.render('dashboard', {
-            title: 'Dashboard',
-            user: req.user
-        });
+        db.find({selector: {type: 'note', collaborators: {$in: [req.user.username]}}}, function(err, body) {
+            res.render('dashboard', {
+                title: 'Dashboard',
+                user: req.user,
+                notes: body
+            });
+            console.log(body);
+        })
     });
 
     app.post('/note/new', isLoggedIn, function(req, res) {
@@ -95,13 +143,6 @@ module.exports = function(app, passport) {
         });
     });
 
-    app.get('/api/list', isLoggedIn, function(req, res) {
-
-        db.find({selector: {type: 'note', collaborators: {$in: [req.user.username]}}}, function(err, body) {
-            res.json(err || body);
-        });
-    });
-
     // function makeIndex() {
     //     db.index({name:'type', type:'json', index:{fields:['type']}}, function(err, body) {
     //         if (!err) {
@@ -111,9 +152,6 @@ module.exports = function(app, passport) {
     //         }
     //     });
     // }
-
-
-
 
     function isLoggedIn(req, res, next) {
         // if user is authenticated in the session, carry on
