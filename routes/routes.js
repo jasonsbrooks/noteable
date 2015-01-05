@@ -76,11 +76,16 @@ module.exports = function(app, passport) {
         })
     });
 
+    app.post('/notes/iphone-upload', function(req, res) {
+        console.log(req.body);
+        console.log(req.files);
+        console.log(req);
+        res.json({'success':'true'});
+    });
+
     app.get('/register', function(req, res) {
         res.render('login', { title: 'Register' });
     });
-
-
     
     app.post('/register',  function(req, res, next) {
         passport.authenticate('local-signup', function(err, user, info) {
@@ -141,6 +146,12 @@ module.exports = function(app, passport) {
             }
             res.end();
         });
+    });
+
+    app.get('/note/:noteID', function(req, res) {
+        // use this to open a note once created
+        console.log(req.param("noteID"));
+        res.send('hello mate');
     });
 
     // function makeIndex() {

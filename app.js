@@ -6,7 +6,8 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     fs = require('fs'),
-    session = require('cookie-session');
+    session = require('cookie-session'),
+    multer = require('multer');
 
 
 module.exports = function(config, db) {
@@ -26,6 +27,7 @@ module.exports = function(config, db) {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser());
     app.use(express.static(path.join(__dirname, 'public')));
+    app.use(multer({ inMemory:true }));
 
     app.use(session({
         secret: process.env.NOTEABLE_SECRET_KEY,
