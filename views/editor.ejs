@@ -4,11 +4,11 @@
     <% include partials/template/cssdefaults.ejs %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/editor.css" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/medium-editor.css">
-    
+    <link rel="stylesheet" type="text/css" href="/stylesheets/modal.css">
     <link rel="stylesheet" type="text/css" href="/stylesheets/themes/default.css" />
     <% include partials/template/jsdefaults.ejs %>
-    <script src="javascripts/medium-editor.js"></script>
-    
+    <script src="/javascripts/medium-editor.js"></script>
+    <script src="/javascripts/modal.js"></script>
 </head>
 
 <body>
@@ -21,9 +21,17 @@
 
         <div id="save-section">
             <a href="#" class="button">Save</a>
-            <a href="#" class="button">Share</a>
+            <a href="#" class="button btn">Share</a>
         </div>
 
+    </div>
+
+    <div class="modal">
+        <div class="overlay"></div>
+        <div class="modal__contents modal--transition">
+            <a class="modal__close" href="#">X</a>
+            <h1>Resize the window, dawg</h1>
+        </div>
     </div>
 
 
