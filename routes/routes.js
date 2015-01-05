@@ -153,7 +153,8 @@ module.exports = function(app, passport) {
                 res.render('editor', {
                     title: 'Editor',
                     user: req.user,
-                    doc: doc
+                    doc: doc,
+                    shareURL: req.protocol + '://' + req.get('host') + '/edit/' + noteID + '#share'
                 });
             }
         });

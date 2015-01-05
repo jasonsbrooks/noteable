@@ -59,6 +59,8 @@
   top: 2rem;
   text-decoration: none;
   display: none;
+  color: #D4341A;
+  text-decoration: none;
 }
 
 .modal--show {

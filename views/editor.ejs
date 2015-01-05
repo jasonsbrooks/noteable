@@ -30,7 +30,12 @@
         <div class="overlay"></div>
         <div class="modal__contents modal--transition">
             <a class="modal__close" href="#">X</a>
-            <h1>Resize the window, dawg</h1>
+            <h1>Sharing Settings</h1>
+            <input onClick="this.setSelectionRange(0, this.value.length)" readonly="readonly" value="<%= shareURL %>">
+            <form action="">
+                <input type="radio" name="sex" value="male">Private<br>
+                <input type="radio" name="sex" value="female">Public
+            </form>
         </div>
     </div>
 
