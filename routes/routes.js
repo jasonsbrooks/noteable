@@ -110,13 +110,6 @@ module.exports = function(app, passport) {
         res.redirect('/');
     });
 
-    app.get('/editor', isLoggedIn, function(req, res) {
-        res.render('editor', {
-            title: 'Editor',
-            user: req.user
-        });
-    });
-
     app.get('/dashboard', isLoggedIn, function(req, res) {
         db.find({selector: {type: 'note', collaborators: {$in: [req.user.username]}}}, function(err, body) {
             res.render('dashboard', {
@@ -148,10 +141,22 @@ module.exports = function(app, passport) {
         });
     });
 
-    app.get('/note/:noteID', function(req, res) {
+    app.get('/edit/:noteID', function(req, res) {
         // use this to open a note once created
-        console.log(req.param("noteID"));
-        res.send('hello mate');
+        noteID = req.param("noteID");
+        db.get(noteID, function(err, doc) {
+            if (err) {
+                res.status(404);
+                res.render('404');
+                return;
+            } else {
+                res.render('editor', {
+                    title: 'Editor',
+                    user: req.user,
+                    doc: doc
+                });
+            }
+        });
     });
 
     // function makeIndex() {
@@ -163,6 +168,7 @@ module.exports = function(app, passport) {
     //         }
     //     });
     // }
+    
     require('./users.routes')(app, passport);
 
     function isLoggedIn(req, res, next) {
