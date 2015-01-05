@@ -6,9 +6,9 @@ module.exports = function(app, passport) {
     var db = cloudant.use('noteable');
 
     app.get('/', function(req, res) {
-        res.render('index', { 
+        res.render('index', {
             title: 'Noteable',
-            user: req.user 
+            user: req.user
         });    });
 
     //auth
@@ -18,17 +18,17 @@ module.exports = function(app, passport) {
 
     app.post('/login', function(req, res, next) {
         passport.authenticate('local-login', function(err, user, info) {
-            if (err || !user) { 
+            if (err || !user) {
                 return res.redirect('/login');
             } else {
                 console.log(user)
                 req.logIn(user, function(err) {
-                    if (err) { 
+                    if (err) {
                         return res.redirect('/login');
-                    } else { 
+                    } else {
                         return res.redirect('/dashboard')
-                    }  
-                })      
+                    }
+                })
             }
         })(req, res, next);
 
@@ -90,17 +90,17 @@ module.exports = function(app, passport) {
     app.post('/register',  function(req, res, next) {
         passport.authenticate('local-signup', function(err, user, info) {
             console.log("In Passport Register Route");
-            if (err || !user) { 
+            if (err || !user) {
                 return res.redirect('/register');
             } else {
                 console.log(user)
                 req.logIn(user, function(err) {
-                    if (err) { 
+                    if (err) {
                         return res.redirect('/register');
-                    } else { 
+                    } else {
                         return res.redirect('/dashboard')
-                    }  
-                })      
+                    }
+                })
             }
         })(req, res, next);
     });
@@ -163,6 +163,7 @@ module.exports = function(app, passport) {
     //         }
     //     });
     // }
+    require('./users.routes')(app, passport);
 
     function isLoggedIn(req, res, next) {
         // if user is authenticated in the session, carry on
