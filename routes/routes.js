@@ -70,7 +70,7 @@ module.exports = function(app, passport) {
                         }
                     });
                 }
-                return res.json({'success': 'true', 'token': uuid4, 'code': '0'});
+                return res.json({'success': 'true', 'token': uuid4, 'code': '0', 'name': user.fullName});
             } else {
                 console.log("Password is not correct");
                 console.log(user.token);
