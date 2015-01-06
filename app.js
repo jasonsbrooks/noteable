@@ -7,7 +7,8 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     fs = require('fs'),
     session = require('cookie-session'),
-    multer = require('multer');
+    multer = require('multer'),
+    AWS = require('aws-sdk');
 
 
 module.exports = function(config, db) {
@@ -34,6 +35,8 @@ module.exports = function(config, db) {
     }));
     app.use(passport.initialize());
     app.use(passport.session());
+
+    AWS.config.update({region: 'us-east-1'});
 
     require('./routes/routes.js')(app, passport);
 

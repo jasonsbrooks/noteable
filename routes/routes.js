@@ -1,9 +1,13 @@
 var cloudant = require('../config/cloudant.js').dbConnection();
 var uuid = require('uuid-js');
 var bcrypt = require('bcrypt');
+var AWS = require('aws-sdk');
+var crypto = require('crypto');
+var fs = require('fs');
 
 module.exports = function(app, passport) {
     var db = cloudant.use('noteable');
+    var s3 = new AWS.S3();
 
     app.get('/', function(req, res) {
         res.render('index', {
@@ -77,10 +81,22 @@ module.exports = function(app, passport) {
     });
 
     app.post('/notes/iphone-upload', function(req, res) {
-        console.log(req.body);
-        console.log(req.files);
-        console.log(req);
-        res.json({'success':'true'});
+        var contents = req.files.photo.buffer;
+        var hash = crypto.createHash('sha1');
+        hash.setEncoding('hex');
+        hash.end()
+        var fName = hash.read() + '.jpg';
+        var params = {Bucket: 'noteable-paf14', Key: fName, Body: contents, ACL: 'public-read'};
+        s3.putObject(params, function(err, data){
+            if (err) {
+                console.log('Error uploading data: ', data);
+                return res.json({'success':'false'});
+            } else {
+                console.log('Successful upload');
+                console.log('URL: http://noteable-paf14.s3.amazonaws.com/' + fName);
+                return res.json({'success':'true'});
+            }
+        });
     });
 
     app.get('/register', function(req, res) {
