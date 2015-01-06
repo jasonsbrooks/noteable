@@ -70,7 +70,7 @@ module.exports = function(app, passport) {
                         }
                     });
                 }
-                return res.json({'success': 'true', 'token': uuid4, 'code': '0'});
+                return res.json({'success': 'true', 'token': uuid4, 'code': '0', 'name': user.fullName});
             } else {
                 console.log("Password is not correct");
                 console.log(user.token);
@@ -96,6 +96,18 @@ module.exports = function(app, passport) {
                 console.log('URL: http://noteable-paf14.s3.amazonaws.com/' + fName);
                 return res.json({'success':'true'});
             }
+        });
+    });
+
+    //for Jason to fill out
+    app.get('/iphone/files', function(req, res) {
+        var token = req.query.token;
+        res.json({
+            'success': 'true',
+            'results':[
+            {'name': 'file1', 'url': 'file2'},
+            {'name': 'jazear', 'url': 'microsoft'}
+            ]
         });
     });
 
