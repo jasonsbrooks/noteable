@@ -39,15 +39,15 @@ module.exports = function(app, passport) {
     });
 
     app.post('/iphone-login', function(req, res) {
-        email = req.body.username;
+        email = req.body.email;
         password = req.body.password;
-        db.find({selector:{username:email}}, function(err, result) {
+        db.find({selector:{email:email}}, function(err, result) {
             if (err){
                 console.log("There was an error finding the user: " + err);
                 return res.json({'success': 'false', 'code': '1'});
             }
             if (result.docs.length == 0){
-                console.log("Username was not found");
+                console.log("Email was not found");
                 return res.json({'success': 'false', 'code': '1'});
             }
 
@@ -127,7 +127,7 @@ module.exports = function(app, passport) {
     });
 
     app.get('/dashboard', isLoggedIn, function(req, res) {
-        db.find({selector: {type: 'note', collaborators: {$in: [req.user.username]}}}, function(err, body) {
+        db.find({selector: {type: 'note', collaborators: {$in: [req.user.email]}}}, function(err, body) {
             res.render('dashboard', {
                 title: 'Dashboard',
                 user: req.user,
@@ -142,8 +142,8 @@ module.exports = function(app, passport) {
         db.insert({
             type: 'note',
             name: 'Untitled document',
-            owner: req.user.username,
-            collaborators: [req.user.username],
+            owner: req.user.email,
+            collaborators: [req.user.email],
             permission: 1,
             time: Math.floor(new Date() / 1000)
         }, function(err, doc) {
