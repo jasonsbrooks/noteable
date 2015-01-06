@@ -47,14 +47,16 @@ module.exports.testDbConnection = function(callback) {
                     }
                 } else {
                     console.log('Created default db "%s"', cloudConfig.cloudant.dbName);
+                    var bcrypt = require('bcrypt');
                     var dbname = cloudConfig.cloudant.dbName;
                     var admin_user = cloudConfig.admin_user;
                     var admin_pass = cloudConfig.admin_password;
                     var admin_email = cloudConfig.admin_email;
                     var index_fields = cloudConfig.index_fields;
                     var hash_pass = bcrypt.hashSync(admin_pass, 10);
+                    var Cloudant = dbConnection();
                     var userdb = Cloudant.use(dbname);
-                    userdb.insert({ username:admin_user, password:hash_pass, email: admin_email }, function(err, body) {
+                    userdb.insert({ fullName:admin_user, password:hash_pass, email: admin_email }, function(err, body) {
                         if (!err) {
                             console.log("Admin User was created!");
                             //indexes
