@@ -9,17 +9,27 @@
 <body>
 
 	<div id="main-container">
-		<form action="/note/new" method="POST">
-			<input type="submit" value="Submit">
-		</form>
+
 		<% include partials/template/header.ejs %>
+
 		<div id="documents-container">
 			<div class="section group">
+
+				<a href="/note/new"><div class="col span_1_of_3">
+					<div class="box">
+						<span>New Note</span><br>
+						
+					</div>
+					<div class="doc">
+					</div>
+				</div></a>
+
 				<% for (var i in notes['docs']) { %>
 				<a href="/edit/<%= notes['docs'][i]._id %>"><div class="col span_1_of_3">
 					<div class="box">
 						<span><%= notes['docs'][i].name %></span><br>
-						<span>Created on iPhone</span>
+						<% var d = new Date(notes['docs'][i].time) %>
+						<span>Created on <%= d.getMonth()+1 + '/' + d.getDate() + '/' + d.getFullYear() %> </span>
 					</div>
 					<div class="doc">
 					</div>

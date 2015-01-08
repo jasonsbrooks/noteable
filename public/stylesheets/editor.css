@@ -4,26 +4,25 @@
 	font-size: 1.5em;
 }
 
-.editable {
-	background-color: #efefef;
+#editor {
+	background-color: white;
 	border: solid 1px #cccccc;
-	outline: none;
 
 }
+
+#toolbar {
+	background-color: white;
+	border: solid 1px #cccccc;
+	margin-bottom: 10px;
+}
+
 
 #editor-container {
 	margin-top: 2em;	
+	margin-bottom: 1em;
 }
 
-#editor-container .editable {
-	min-height: 500px;
-	padding: 1em;
 
-}
-
-#save-section {
-	margin-top: 2em;
-}
 
 #save-section .button {
 	padding: 10px;

@@ -2,21 +2,59 @@
 <head>
     <% include partials/template/head.ejs %>
     <% include partials/template/cssdefaults.ejs %>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/editor.css" />
-    <link rel="stylesheet" type="text/css" href="/stylesheets/medium-editor.css">
-    <link rel="stylesheet" type="text/css" href="/stylesheets/modal.css">
-    <link rel="stylesheet" type="text/css" href="/stylesheets/themes/default.css" />
     <% include partials/template/jsdefaults.ejs %>
-    <script src="/javascripts/medium-editor.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/editor.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/modal.css">
+    <link rel="stylesheet" href="//cdn.quilljs.com/0.19.8/quill.snow.css" />
     <script src="/javascripts/modal.js"></script>
 </head>
 
 <body>
     <div id="main-container">
         <% include partials/template/header.ejs %>
-        <div id="document-name" class="editable">Document Name</div>
+        <input type='text' id="document-name" placeholder='Document Title'>
         <div id="editor-container">
-            <div class="editable" id="document-text">Type your text</div>
+            <div id="toolbar">
+            <span class="ql-format-group">
+                <select class="ql-font">
+                    <option value="sans-serif">Sans Serif</option>
+                    <option value="serif" selected>Serif</option>
+                    <option value="monospace">Monospace</option>
+                </select>
+                <select class="ql-size">
+                    <option value="small">Small</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="large">Large</option>
+                    <option value="huge">Huge</option>
+                </select>
+            </span>
+            <span class="ql-format-group">
+                <span class="ql-bold ql-format-button"></span>
+                <span class="ql-format-separator"></span>
+                <span class="ql-italic ql-format-button"></span>
+                <span class="ql-format-separator"></span>
+                <span class="ql-underline ql-format-button"></span>
+                <span class="ql-format-separator"></span>
+                <span class="ql-strike ql-format-button"></span>
+            </span>
+            <span class="ql-format-group">
+                <span class="ql-format-button ql-bullet"></span>
+                <span class="ql-format-separator"></span>
+                <span class="ql-format-button ql-link"></span>
+            </span>
+            <span class="ql-format-group">
+                <select title="Text Color" class="ql-color">
+                    <% include partials/template/rgbcolors.ejs %>
+                </select>
+                <span class="ql-format-separator">
+                    <% include partials/template/rgbcolors.ejs %>
+                </span>
+                <select title="Background Color" class="ql-background"></select>
+            </span>
+            </div>
+            <div id="editor" class="editor">
+
+            </div>
         </div>
 
         <div id="save-section">
@@ -39,16 +77,17 @@
         </div>
     </div>
 
-
+    <script src="//cdn.quilljs.com/0.19.8/quill.js"></script>
     <script>
-    var name = new MediumEditor('#document-name', {
-        targetBlank: true,
-        placeholder: ''
-    });
-    var text = new MediumEditor('#document-text', {
-        targetBlank: true,
-        placeholder: ''
-    });
-    </script>
+        var editor = new Quill('#editor', {
+
+            modules: {
+                'multi-cursor': true,
+                'toolbar': { container: '#toolbar' },
+                'link-tooltip': true
+            },
+            theme: 'snow'
+        });
+  </script>
 </body>
 </html>

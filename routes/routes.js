@@ -149,7 +149,7 @@ module.exports = function(app, passport) {
         })
     });
 
-    app.post('/note/new', isLoggedIn, function(req, res) {
+    app.get('/note/new', isLoggedIn, function(req, res) {
         console.log("New note")
         db.insert({
             type: 'note',
@@ -157,13 +157,13 @@ module.exports = function(app, passport) {
             owner: req.user.email,
             collaborators: [req.user.email],
             permission: 1,
-            time: Math.floor(new Date() / 1000)
+            time: new Date()
         }, function(err, doc) {
             if (err) {
                 console.log(err);
                 res.send(500);
             } else {
-                res.send(200);
+                res.redirect('/edit/' + doc.id);
             }
             res.end();
         });

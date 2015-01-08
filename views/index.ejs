@@ -5,6 +5,9 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/jquery.fullPage.css" />
     <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
     <% include partials/template/jsdefaults.ejs %>
+    <script type="text/javascript" src="/javascripts/jquery.fullPage.js"></script>
+    <script type="text/javascript" src="/javascripts/home.js"></script>
+
 </head>
 
 <body>
@@ -15,12 +18,12 @@
         </div>
         <div id="links-container">
             <% if (typeof user == 'undefined') { %>
-                <span class="header-links header-sign"><a href="/login">Login</a></span>
-                <span class="header-links header-sign"><a href="/register">Register</a></span>
+            <span class="header-links header-sign"><a href="/login">Login</a></span>
+            <span class="header-links header-sign"><a href="/register">Register</a></span>
             <% } else { %>
             <% console.log(user) %>
-                <span class="header-links header-sign"><a href="/dashboard">Dashboard</a></span>
-                <span class="header-links header-sign"><a href="/logout">Logout</a></span>
+            <span class="header-links header-sign"><a href="/dashboard">Dashboard</a></span>
+            <span class="header-links header-sign"><a href="/logout">Logout</a></span>
             <% } %>
         </div>
     </div>
