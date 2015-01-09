@@ -6,7 +6,9 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/editor.css" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/modal.css">
     <link rel="stylesheet" href="//cdn.quilljs.com/0.19.8/quill.snow.css" />
+    <script src="/javascripts/editor.js"></script>
     <script src="/javascripts/modal.js"></script>
+    <script src="/javascripts/jquery.form.min.js"></script>
 </head>
 
 <body>
@@ -47,18 +49,22 @@
                     <% include partials/template/rgbcolors.ejs %>
                 </select>
                 <span class="ql-format-separator">
-                    <% include partials/template/rgbcolors.ejs %>
+                    
                 </span>
-                <select title="Background Color" class="ql-background"></select>
+                <select title="Background Color" class="ql-background">
+                    <% include partials/template/rgbcolors.ejs %>
+                </select>
             </span>
             </div>
             <div id="editor" class="editor">
-
+                
             </div>
         </div>
 
         <div id="save-section">
-            <a href="#" class="button">Save</a>
+            <form id="save-contents-form" action="/edit/<%= doc._id %>/save" method="POST">
+                <button class="button">Save</button>
+            </form>
             <a href="#" class="button btn">Share</a>
         </div>
 
@@ -88,6 +94,7 @@
             },
             theme: 'snow'
         });
+        editor.setHTML('<%- doc.contents %>');
   </script>
 </body>
 </html>
