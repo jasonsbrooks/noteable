@@ -14,7 +14,9 @@
 <body>
     <div id="main-container">
         <% include partials/template/header.ejs %>
-        <input type='text' id="document-name" placeholder='Document Title'>
+        <form id="document-title-form" action="/edit/<%= doc._id %>/name" method="POST">
+            <input type='text' id="document-name" placeholder='<%= doc.name %>'>
+        </form>
         <div id="editor-container">
             <div id="toolbar">
             <span class="ql-format-group">

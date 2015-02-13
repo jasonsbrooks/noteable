@@ -205,6 +205,23 @@ module.exports = function(app, passport) {
         });
     });
 
+    app.post('/edit/:noteID/name', function(req, res) {
+        noteID = req.param("noteID");
+        db.get(noteID, function(err, doc) {
+            if (err) {
+                res.json({'success':'false'});
+                return;
+            } else{
+                doc.name = req.body.name;
+                db.insert(doc, doc.id, function(err, doc) {
+                    // there should never be an error here
+                    // add stuff if there is an error later
+                });
+                res.json({'success':'true'});
+            }
+        });
+    });
+
     // function makeIndex() {
     //     db.index({name:'type', type:'json', index:{fields:['type']}}, function(err, body) {
     //         if (!err) {
