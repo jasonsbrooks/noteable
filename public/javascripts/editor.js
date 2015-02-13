@@ -21,7 +21,6 @@ $(document).ready(function() {
 	}).blur(function() {
 	    $('#document-title-form').submit();
 	});
-});	})
 
 	$('#tokenfield').tokenfield({
 		autocomplete: {
@@ -39,7 +38,7 @@ $(document).ready(function() {
 		$(".token").remove();
 	});
 
-
+	$("#document-name").val('French February');
 
 	$.fn.modal.Constructor.prototype.enforceFocus = function () {
 		var that = this;

@@ -18,7 +18,7 @@
         <div>
         <input type='text' id="document-name" placeholder='Document Title'>
         <form id="save-contents-form" action="/edit/<%= doc._id %>/save" method="POST">
-            <a type="submit" class="ph-button ph-btn-green"> Save </a>
+            <button type="submit" class="ph-button ph-btn-green">Save </button>
         </form>
         <a href="#" id='shareButton' class="ph-button ph-btn-blue" data-toggle="modal" data-target="#shareModal">Share</a>
         </div>
@@ -65,16 +65,6 @@
             </div>
             <div id="editor" class="editor">
                 <%- doc.contents %>
-    
-
-               <a href="#" class="tooltip">
-                   <img src="/tooltip/css-tooltip-image.gif" />
-                   <span>
-                       <img class="callout" src="images/callout.gif" />
-                       <strong>CSS only Tooltip</strong><br />
-                       Pure CSS popup tooltips with clean semantic XHTML.
-                   </span>
-               </a>
             </div>
         </div>
     </div>
