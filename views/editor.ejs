@@ -18,7 +18,7 @@
         <div>
         <input type='text' id="document-name" placeholder='Document Title' value="<% doc.name %>">
         <form id="save-contents-form" action="/edit/<%= doc._id %>/save" method="POST">
-            <a type="submit" class="ph-button ph-btn-green"> Save </a>
+            <button type="submit" class="ph-button ph-btn-green">Save </button>
         </form>
         <a href="#" id='shareButton' class="ph-button ph-btn-blue" data-toggle="modal" data-target="#shareModal">Share</a>
         </div>
@@ -71,6 +71,7 @@
 
 
 
+
     <!-- Modal -->
     <div class="modal fade" id="shareModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -102,5 +103,15 @@
             theme: 'snow'
         });
   </script>
+
+  <!-- HTML to write -->
+
+  <!-- Generated markup by the plugin -->
+  <div class="tooltip top" role="tooltip">
+    <div class="tooltip-arrow"></div>
+    <div class="tooltip-inner">
+      Some tooltip text!
+    </div>
+  </div>
 </body>
 </html>
