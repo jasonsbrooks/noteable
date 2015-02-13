@@ -8,7 +8,20 @@ $(document).ready(function() {
 		success: function(html, status, xhr, myForm) {
 			console.log("successful");
 		}
-	})
+	});
+
+	$("#document-title-form").ajaxForm({
+		success: function(html, status, xhr, myForm) {
+			console.log("successful");
+		}
+	});
+
+	$("#document-name").focus(function() {
+		console.log('in');
+	}).blur(function() {
+	    $('#document-title-form').submit();
+	});
+});	})
 
 	$('#tokenfield').tokenfield({
 		autocomplete: {
