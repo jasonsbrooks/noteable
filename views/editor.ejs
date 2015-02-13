@@ -4,19 +4,24 @@
     <% include partials/template/cssdefaults.ejs %>
     <% include partials/template/jsdefaults.ejs %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/editor.css" />
-    <link rel="stylesheet" type="text/css" href="/stylesheets/modal.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap-tokenfield.min.css" />
     <link rel="stylesheet" href="//cdn.quilljs.com/0.19.8/quill.snow.css" />
-    <script src="/javascripts/editor.js"></script>
-    <script src="/javascripts/modal.js"></script>
     <script src="/javascripts/jquery.form.min.js"></script>
+    <script src="/javascripts/bootstrap-tokenfield.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/css/select2.min.css" />    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/js/select2.min.js"></script>
+    <script src="/javascripts/editor.js"></script>
 </head>
 
 <body>
     <div id="main-container">
         <% include partials/template/header.ejs %>
-        <form id="document-title-form" action="/edit/<%= doc._id %>/name" method="POST">
-            <input type='text' id="document-name" placeholder='<%= doc.name %>'>
+        <div>
+        <input type='text' id="document-name" placeholder='Document Title'>
+        <form id="save-contents-form" action="/edit/<%= doc._id %>/save" method="POST">
+            <a type="submit" class="ph-button ph-btn-green"> Save </a>
         </form>
+        <a href="#" id='shareButton' class="ph-button ph-btn-blue" data-toggle="modal" data-target="#shareModal">Share</a>
+        </div>
         <div id="editor-container">
             <div id="toolbar">
             <span class="ql-format-group">
@@ -62,27 +67,27 @@
                 <%- doc.contents %>
             </div>
         </div>
-
-        <div id="save-section">
-            <form id="save-contents-form" action="/edit/<%= doc._id %>/save" method="POST">
-                <button class="button">Save</button>
-            </form>
-            <a href="#" class="button btn">Share</a>
-        </div>
-
     </div>
 
-    <div class="modal">
-        <div class="overlay"></div>
-        <div class="modal__contents modal--transition">
-            <a class="modal__close" href="#">X</a>
-            <h1>Sharing Settings</h1>
-            <input onClick="this.setSelectionRange(0, this.value.length)" readonly="readonly" value="<%= shareURL %>">
-            <form action="">
-                <input type="radio" name="sex" value="male">Private<br>
-                <input type="radio" name="sex" value="female">Public
-            </form>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="shareModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Share With</h4>
+          </div>
+          <div class="modal-body">
+            <input type="text" class="form-control" id="tokenfield" />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" id="shareShareButton" class="btn btn-primary">Share</button>
+          </div>
         </div>
+      </div>
     </div>
 
     <script src="//cdn.quilljs.com/0.19.8/quill.js"></script>

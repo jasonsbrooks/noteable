@@ -19,17 +19,24 @@ header {
   height: 70px;
 }
 
-.navbar-item {
+header > .navbar-item {
   display: inline-block;
   color: white;
   float: right;
   font-size: 20px;
   margin-left: 20px;
-  
-  
-  
+  text-decoration: none;
   margin-right: 30px;
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  /*line-height: 70px;*/
+}
+
+header > .navbar-item a {
+  color: white;
   line-height: 70px;
+  text-decoration: none;
 }
 
 .account-name{
