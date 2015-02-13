@@ -65,9 +65,20 @@
             </div>
             <div id="editor" class="editor">
                 <%- doc.contents %>
+    
+
+               <a href="#" class="tooltip">
+                   <img src="/tooltip/css-tooltip-image.gif" />
+                   <span>
+                       <img class="callout" src="images/callout.gif" />
+                       <strong>CSS only Tooltip</strong><br />
+                       Pure CSS popup tooltips with clean semantic XHTML.
+                   </span>
+               </a>
             </div>
         </div>
     </div>
+
 
 
 
@@ -102,5 +113,15 @@
             theme: 'snow'
         });
   </script>
+
+  <!-- HTML to write -->
+
+  <!-- Generated markup by the plugin -->
+  <div class="tooltip top" role="tooltip">
+    <div class="tooltip-arrow"></div>
+    <div class="tooltip-inner">
+      Some tooltip text!
+    </div>
+  </div>
 </body>
 </html>
