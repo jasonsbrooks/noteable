@@ -31,7 +31,7 @@
     Description: 	Pixcil Hub Buttons
     Author: 		   Pixcils®
     Version: 	  	1.0
-*/
+    */
 
 /*Main button class
 ==========================*/
@@ -40,25 +40,26 @@ div .ph-button {
 	margin-top: -40px;
 	margin-right: 0;
 	margin-left: 15px;
-    border-style: solid;
-    box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
-    color: #FFFFFF;	   
-    border-radius: 6px;
-    cursor: pointer;
-    display: inline-block;
-    font-style: normal;
-    overflow: hidden;
-    text-align: center;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    transition: all 200ms ease-in-out 0s;
-    white-space: nowrap;	
-    font-family: "Gotham Rounded A","Gotham Rounded B",Helvetica,Arial,sans-serif;
-    font-weight: 700;	
-    height: 50px;
-    width: 100px;
-    line-height: 50px;
-    font-size: 18px;
+	border-style: solid;
+	box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) inset;
+	color: #FFFFFF;	   
+	border-radius: 6px;
+	cursor: pointer;
+	display: inline-block;
+	font-style: normal;
+	overflow: hidden;
+	text-align: center;
+	text-decoration: none;
+	text-overflow: ellipsis;
+	transition: all 200ms ease-in-out 0s;
+	white-space: nowrap;	
+	font-family: "Gotham Rounded A","Gotham Rounded B",Helvetica,Arial,sans-serif;
+	font-weight: 700;	
+	height: 50px;
+	width: 100px;
+	line-height: 50px;
+	font-size: 18px;
+	border: none;
 	
 }
 
@@ -71,111 +72,112 @@ div .ph-button:hover {
 ==========================*/
 .ph-btn-green {
 
-    border-color: #3AC162;
+	border-color: #3AC162;
 	background-color: #5FCF80;
 
 }
 .ph-btn-green:hover, .ph-btn-green:focus, .ph-btn-green:active {
-    background-color: #4BC970;
-    border-color: #3AC162;    
+	background-color: #4BC970;
+	border-color: #3AC162;    
 }
 
 /*Blue
 ==========================*/
 .ph-btn-blue {
 
-    border-color: #326E99;
-    background-color: #3F8ABF;
+	border-color: #326E99;
+	background-color: #3F8ABF;
 }
 
 .ph-btn-blue:hover, .ph-btn-blue:focus, .ph-btn-blue:active {
-    background-color: #397CAC;
-    border-color: #326E99;   
+	background-color: #397CAC;
+	border-color: #326E99;   
 }
 
 /*Grey
 ==========================*/
 .ph-btn-grey {
 
-     background-color: #C6CCD2;
-     border-color: #AAB3BB;
+	background-color: #C6CCD2;
+	border-color: #AAB3BB;
 }
 .ph-btn-grey:hover, .ph-btn-grey:focus, .ph-btn-grey:active {
-    background-color: #B8BFC7;
-    border-color: #AAB3BB; 
+	background-color: #B8BFC7;
+	border-color: #AAB3BB; 
 }
 
 /*Red
 ==========================*/
 .ph-btn-red {
 
-    background-color: #ED5A5A !important;
-    border-color: #EA4343 !important;
+	background-color: #ED5A5A !important;
+	border-color: #EA4343 !important;
 
 }
 .ph-btn-red:hover, .ph-btn-red:focus, .ph-btn-red:active {
-    background: none repeat scroll 0 0 #EB4848 !important;
-    border-color: #E83131 !important;    
+	background: none repeat scroll 0 0 #EB4848 !important;
+	border-color: #E83131 !important;    
 }
 
 
 /*DEMO ONLY FOR CENTER POSITION*/
 .ph-container {
-  
-  margin: 0 auto;
-  display: inline;
 
-  
+	margin: 0 auto;
+	display: inline;
+
+
 }
 
 .ph-float {
-  
-  float: left;
-  width: 22%;
-  padding: 10px;  
-  padding-top: 50px;  
-  text-align: center;
+
+	float: left;
+	width: 22%;
+	padding: 10px;  
+	padding-top: 50px;  
+	text-align: center;
 
 }
 
 .ph-clear {
-  
-  clear: both;
-   
+
+	clear: both;
+
 }
 
 
 a.tooltips {
-  position: relative;
-  display: inline;
+	position: relative;
+	display: inline;
 }
 a.tooltips div {
-  position: absolute;
-  color: #FFFFFF;
-  background: black;
-  line-height: 20px;
-  text-align: center;
-  visibility: hidden;
-  border-radius: 6px;
-  width: 400px;
+	padding: 10px;
+	position: absolute;
+	color: #FFFFFF;
+	background: black;
+	line-height: 20px;
+	text-align: center;
+	visibility: hidden;
+	border-radius: 6px;
+	width: 400px;
 }
 a.tooltips div:after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: 100%;
-  margin-top: -8px;
-  width: 0; height: 0;
-  border-right: 8px solid #black;
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
+	content: '';
+	position: absolute;
+	top: 50%;
+	right: 100%;
+	margin-top: -8px;
+	width: 0; height: 0;
+	border-right: 8px solid #black;
+	border-top: 8px solid transparent;
+	border-bottom: 8px solid transparent;
 }
 a:hover.tooltips div {
-  visibility: visible;
-  opacity: 0.8;
-  left: 100%;
-  top: 50%;
-  margin-top: -15px;
-  margin-left: 15px;
-  z-index: 999;
+	visibility: visible;
+	opacity: 0.8;
+	left: 100%;
+	top: 50%;
+	margin-top: -15px;
+	margin-left: 15px;
+	z-index: 999;
 }
