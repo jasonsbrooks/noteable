@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="//cdn.quilljs.com/0.19.8/quill.snow.css" />
     <script src="/javascripts/jquery.form.min.js"></script>
     <script src="/javascripts/bootstrap-tokenfield.min.js"></script>
-    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/css/select2.min.css" />    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/js/select2.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/css/select2.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/js/select2.min.js"></script>
     <script src="/javascripts/editor.js"></script>
 </head>
 
@@ -16,7 +17,7 @@
     <div id="main-container">
         <% include partials/template/header.ejs %>
         <div>
-        <input type='text' id="document-name" placeholder='Document Title' value="<% doc.name %>">
+        <input type='text' id="document-name" placeholder='Document Title' value="<%= doc.name %>">
         <form id="save-contents-form" action="/edit/<%= doc._id %>/save" method="POST">
             <button type="submit" class="ph-button ph-btn-green">Save </button>
         </form>
@@ -82,6 +83,9 @@
           </div>
           <div class="modal-body">
             <input type="text" class="form-control" id="tokenfield" />
+          </div>
+          <div class="modal-body">
+            <input type="text" class="form-control" id="tokenfield" onClick="this.setSelectionRange(0, this.value.length)" readonly="readonly" value="<%= shareURL %>" />
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

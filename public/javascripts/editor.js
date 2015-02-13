@@ -38,8 +38,6 @@ $(document).ready(function() {
 		$(".token").remove();
 	});
 
-	$("#document-name").val('French February');
-
 	$.fn.modal.Constructor.prototype.enforceFocus = function () {
 		var that = this;
 		$(document).on('focusin.modal', function (e) {

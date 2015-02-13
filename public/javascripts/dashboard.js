@@ -4,7 +4,6 @@ $(document).ready(function() {
      	$('#fake-box').fadeOut(function() {
      		$('.French').fadeIn();
      	});
-	}, 6000);
+	}, 20000);
 
 });
-
