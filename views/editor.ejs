@@ -16,7 +16,7 @@
     <div id="main-container">
         <% include partials/template/header.ejs %>
         <div>
-        <input type='text' id="document-name" placeholder='Document Title'>
+        <input type='text' id="document-name" placeholder='Document Title' value="<% doc.name %>">
         <form id="save-contents-form" action="/edit/<%= doc._id %>/save" method="POST">
             <a type="submit" class="ph-button ph-btn-green"> Save </a>
         </form>

@@ -23,9 +23,26 @@
 					<div class="doc">
 					</div>
 				</div></a>
+				<!-- 
+				<div class="spinner">
+				  <div class="double-bounce1"></div>
+				  <div class="double-bounce2"></div>
+				</div> -->
+
+				<a id="fake-box"><div class="col span_1_of_3">
+					<div class="box">
+						<div class="spinner">
+				  <div class="double-bounce1"></div>
+				  <div class="double-bounce2"></div>
+				</div>
+						
+					</div>
+					<div class="doc">
+					</div>
+				</div></a>
 
 				<% for (var i in notes['docs']) { %>
-				<a href="/edit/<%= notes['docs'][i]._id %>"><div class="col span_1_of_3">
+				<a href="/edit/<%= notes['docs'][i]._id %>" class="<%= notes['docs'][i].name %>"><div class="col span_1_of_3">
 					<div class="box">
 						<span><%= notes['docs'][i].name %></span><br>
 						<% var d = new Date(notes['docs'][i].time) %>
